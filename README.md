@@ -14,4 +14,4 @@ With Git clone
 > cd the-ski-challenge
 ```
 
-Or Click [here](https://github.com/capnTP/the-ski-challenge/archive/master.zip) then download the .zip file.  Extract the contents of the zip file, then open your terminal, change to the project directory, and simply type in the terminal 'node path.js' to run the program.
+Or Click [here](https://github.com/capnTP/the-ski-challenge/archive/master.zip) then download the .zip file.  Extract the contents of the zip file, then open your terminal, change to the project directory, and simply type in the terminal '```diff -node path.js ```' to run the program.
