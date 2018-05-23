@@ -10,8 +10,8 @@ You need to have at least NodeJS version 8 and onwards in order to run the follo
 
 With Git clone
 ```
-> git clone https://github.com/StephenGrider/ReduxSimpleStarter.git
-> cd ReduxSimpleStarter
+> git clone https://github.com/capnTP/the-ski-challenge.git
+> cd the-ski-challenge
 ```
 
-Or Click [here](https://github.com/StephenGrider/ReactStarter/releases) then download the .zip file.  Extract the contents of the zip file, then open your terminal, change to the project directory, and simply type in the terminal 'node path.js' to run the program.
+Or Click [here](https://github.com/capnTP/the-ski-challenge/archive/master.zip) then download the .zip file.  Extract the contents of the zip file, then open your terminal, change to the project directory, and simply type in the terminal 'node path.js' to run the program.
