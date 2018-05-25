@@ -1,104 +1,67 @@
-//this function is for finding highest ground and return next path
-const findNext = (cur, cells) => {
-  let temp = cells.map( c => c.value);
-  // cells.sort();
-  let next = temp.filter( v => v < cur);
-  let max = Math.max(...next);
+//function to find longest paths
+const longestPaths = (map) => {
+  let routes = [];
+  for (let i = 0; i < map.length; i++) {
+    for (let j = 0; j < map[i].length; j++) {
+      routes.push(innerLongestPath(i, j, map));
+    }
+  }
 
-  return cells.find( c => c.value === max);
+  //check longest length
+  let res = checkLength(routes);
+
+  return res;
 };
 
-//this function is used to return a possible path from all cell in map[i][j]; as i = row, j = column
-const findPath = (map) => {
-  let cur = {}, next = {}, tempPath = [], path = [];
-    for (let i = 0; i < map.length; i++) {
-      for (let j = 0; j < map[i].length; j++) {
-        cur = { row: i, col: j, value: map[i][j] };
-        tempPath.push(cur);
+//function to find longest lenth from each inner cell
+const innerLongestPath =  (row, col, map) => {
+  let length = 0, bestPath = [], cur = {row, col};
+  let moves = [{row: row+1, col},{row: row-1, col},{row, col: col+1},{row, col: col-1}];
+  //for all possible neighbor cells
+  for (let m = 0; m < moves.length; m++) {
+    //if cell is valid and smaller
+    if (moves[m].row >= 0 && moves[m].row < map.length && moves[m].col >= 0 && moves[m].col < map[0].length && map[moves[m].row][moves[m].col] < map[cur.row][cur.col]) {
+      let tempN = innerLongestPath(moves[m].row, moves[m].col, map).length;
+      let path = innerLongestPath(moves[m].row, moves[m].col, map).paths;
 
-        while (map[cur.row][cur.col] !== 0) {
-          let cells = [];
-
-          //check if cell around current cell is valid
-          if (cur.row-1 >= 0 && map[cur.row-1][cur.col])
-            cells.push({row: cur.row-1, col: cur.col, value: map[cur.row-1][cur.col]});
-
-          if (cur.row+1 < map.length && map[cur.row+1][cur.col])
-            cells.push({row: cur.row+1, col: cur.col, value: map[cur.row+1][cur.col]});
-
-          if (cur.col+1 < map[i].length && map[cur.row][cur.col+1])
-            cells.push({row: cur.row, col: cur.col+1, value: map[cur.row][cur.col+1]});
-
-          if (cur.col-1 >= 0 && map[cur.row][cur.col-1])
-            cells.push({row: cur.row, col: cur.col-1, value: map[cur.row][cur.col-1]});
-
-          //find next coordinates and value from current cell
-          next = findNext(cur.value, cells);
-
-          //if no suitable value is found exit
-          if (!next)
-            break;
-
-          //otherwise continue
-          tempPath.push(next);
-          cur = next;
-          next = {};
-        }
-
-        path.push(tempPath);
-        tempPath = [];
+      if (tempN > length) {
+        length = tempN;
+        bestPath = path;
       }
     }
-
-  return path;
+    if (bestPath[bestPath.length-1] !== map[row][col])
+      bestPath.push(map[row][col]);
+  }
+  return {length: length + 1, paths: bestPath};
 };
 
-//a function to find the longest path
-const findLongest = (paths) => {
-  let counter = 0;
-  let longPaths = [];
-
-  //first find the longest possible length
-  for (let i = 0; i < paths.length; i++) {
-    if (paths[i].length > counter)
-      counter = paths[i].length;
+//function to check longest lenth
+const checkLength = (routes) => {
+  let counter = 0, res = [];
+  for (let i = 0; i < routes.length; i++) {
+    if (counter < routes[i].length)
+      counter = routes[i].length;
+  }
+  for (let j = 0; j < routes.length; j++) {
+    if (routes[j].length === counter)
+      res.push(routes[j]);
   }
 
-  //then find any path with the following length
-  for (let i = 0; i < paths.length; i++) {
-    if (paths[i].length === counter)
-      longPaths.push(paths[i]);
-  }
-
-  return longPaths;
+  return res;
 };
 
-//a function to find steepest route
-const findSteepest = (paths) => {
-  let counter = 0, steepestRoute = [];
-
-  //first find steepest value
-  for (let i = 0; i < paths.length; i++) {
-    let temp = paths[i].map( p => p.value );
-    let max = Math.max(...temp);
-    let min = Math.min(...temp);
-    let res = max - min;
-
-    if (counter < res)
-      counter = res;
+//function to check steepest or height
+const checkSteepest = (res) => {
+  let steepestPath = [], steepest = 0;
+  for (let i = 0; i < res.length; i++) {
+    if (steepest < Math.max(...res[i].paths) - Math.min(...res[i].paths))
+      steepest = Math.max(...res[i].paths) - Math.min(...res[i].paths);
   }
-
-  //then find the route that has the following value
-  for (let i = 0; i < paths.length; i++) {
-    let temp = paths[i].map( p => p.value );
-    let max = Math.max(...temp);
-    let min = Math.min(...temp);
-
-    if (max - min === counter)
-      steepestRoute.push(temp);
+  for (let i = 0; i < res.length; i++) {
+      if (Math.max(...res[i].paths) - Math.min(...res[i].paths) === steepest)
+        steepestPath.push(res[i]);
   }
+  return steepestPath;
+}
 
-  return steepestRoute;
-};
-
-module.exports = { findNext , findPath , findLongest , findSteepest };
+module.exports = { longestPaths , checkSteepest };

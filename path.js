@@ -1,5 +1,5 @@
 //import relevant functions
-const { findNext , findPath , findLongest , findSteepest } = require('./utils/utils');
+const { longestPaths , checkSteepest } = require('./utils/utils');
 
 //define the given map down below
 const map = [
@@ -13,17 +13,14 @@ const map = [
   [76,14,43,86,73,19,47,71]
 ];
 
-//find all routes with the possible longest length
-let longest = findLongest(findPath(map));
-//find one with the steepest value
-let steepest = findSteepest(longest);
+//find longest
+let longest = longestPaths(map);
+//find steepest
+let steepest = checkSteepest(longest);
+// //display result
 console.log('-----------------------------------------------------');
-console.log(`\nBelow are the longest possible routes down the hill with length = ${longest[0].length}:\n`);
-
-longest.forEach( (r) => {
-  console.log(r.map( e => e.value ));
-})
-
-console.log('\nBelow is the steepest route down the hill:\n');
+console.log(`\nBelow are the longest possible paths down the hill:\n`);
+console.log(longest);
+console.log(`\nBelow is the steepest route down the hill of height ${Math.max(...steepest[0].paths) - Math.min(...steepest[0].paths)}:\n`);
 console.log(steepest);
 console.log('\n-----------------------------------------------------');
