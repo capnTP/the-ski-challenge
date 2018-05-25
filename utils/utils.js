@@ -9,6 +9,10 @@ const longestPaths = (map) => {
 
   //check longest length
   let res = checkLength(routes);
+  //sorting from the top of the hill
+  for (let i = 0; i < res.length; i++) {
+    res[i].paths = res[i].paths.reverse();
+  }
 
   return res;
 };
